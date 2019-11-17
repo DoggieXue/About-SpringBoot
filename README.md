@@ -7,3 +7,4 @@ SpringBoot学习相关
  
 - SpringBoot表单验证  
     使用@Valid和BindingResult实现
+- 使用maven-assembly-plugin插件对SpringBoot项目打增量包
