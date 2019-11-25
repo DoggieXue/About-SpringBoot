@@ -9,6 +9,8 @@ public enum ResultEnum {
     ADD_ERROR("101","插入区域信息失败!"),
     UPDATE_ERROR("102","更新区域信息失败!"),
     DELETE_ERROR("103","删除区域信息失败!"),
+
+    UPLOAD_ERROR("104","上传文件失败！"),
     ;
 
     private String code;

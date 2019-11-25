@@ -1,5 +1,67 @@
 # About-SpringBoot
 
+SpringBoot文件上传
+---
+#方式一： 前后端分离，ajax请求上传
+使用Web服务器配合，并以Web服务器充当图片服务器，以Nginx为例，大致流程如下：    
+1. 页面提交http上传请求到Nginx Web服务器;
+2. Nginx将该请求转发到应用服务器(http://localhost:8050/springboot);
+3. 应用服务器将数据流PUT到WEB服务器的指定目录下(http://localhost:8090/)，并将图片访问URL返回给前端，前端用于展示。  
+4. 如果访问页面的URL为`http://localhost:8090/upload.html`,那么页面中的ajax请求URL为`http://localhost:8090/api/uploadFile`，这样就可以使用Nginx的URL重写解决跨域问题；  
+   如果ajax请求的URL为`http://127.0.0.1:8090/api/uploadFile`，则会有跨域问题，因为浏览器会认为`localhost`与`127.0.0.1`不同源。
+
+
+具体实现：  
+- 编写前端页面：upload.html  
+- 将upload.html上传到Nginx服务器的root指定目录下
+- 配置nginx.conf
+```
+server {
+    listen      127.0.0.1:8090;
+    server_name  127.0.0.1;
+    root /Users/xuexiao/Work/nginx/html;
+    index index.html;
+    proxy_buffering off;
+    access_log /usr/local/var/log/nginx/access.log;
+    error_log /usr/local/var/log/nginx/error.log notice;
+    #添加头部信息
+    proxy_set_header Cookie $http_cookie;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Server $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    #该配置可用于处理跨域
+    #location /api {
+    #    rewrite ^/api/(.*)$ /$1 last;
+    #}
+
+    location /uploadFile {
+        proxy_pass http://127.0.0.1:8050/springboot/uploadFile;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   Host              $http_host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_redirect     off;
+        proxy_connect_timeout 300;
+        proxy_send_timeout    300;
+        proxy_read_timeout 300;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+    }
+    #解决405错误码配置
+    location /image {
+        root /Users/xuexiao/Work/nginx/html;
+        dav_methods  PUT;
+    }
+}
+```  
+
+#方式二： 表单形式上传
+
+
+
+
 SpringBoot引入Filter实现对URL的权限控制
 ---
 
