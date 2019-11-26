@@ -2,7 +2,7 @@
 
 SpringBoot文件上传
 ---
-#方式一： 前后端分离，ajax请求上传
+# 方式一： 前后端分离，ajax请求上传
 使用Web服务器配合，并以Web服务器充当图片服务器，以Nginx为例，大致流程如下：    
 1. 页面提交http上传请求到Nginx Web服务器;
 2. Nginx将该请求转发到应用服务器(http://localhost:8050/springboot);
@@ -57,7 +57,7 @@ server {
 }
 ```  
 
-#方式二： 表单形式上传  
+# 方式二： 表单形式上传  
 使用thymeleaf，上传成功后跳转到结果页  
 注意事项：  
 - `UploadFileController`类上的注解由`@RestController`要改成`@Controller`,在需要返回json的方法上单独加`@ResponseBody`;  
