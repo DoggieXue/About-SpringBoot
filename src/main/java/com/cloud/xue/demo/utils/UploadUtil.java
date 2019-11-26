@@ -32,21 +32,8 @@ public class UploadUtil {
      * @return
      */
     public static String upload(Client client, MultipartFile file, String serverPath, String path){
-        // 文件名称生成策略（UUID uuid = UUID.randomUUID()）
-        Date d = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        String formatDate = format.format(d);
-        String str = "";
-        for(int i=0 ;i <5; i++){
-            int n = (int)(Math.random()*90)+10;
-            str += n;
-        }
-        // 获取文件的扩展名
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        // 文件名
-        String fileName = formatDate + str + "." + extension;
         //相对路径
-        String relaPath = path + File.separator + fileName;
+        String relaPath = path + File.separator + generateFileName(file);
 
         String a = serverPath + path;
         File file2 = new File(a);
@@ -66,6 +53,22 @@ public class UploadUtil {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static String generateFileName(MultipartFile file){
+        // 文件名称生成策略（UUID uuid = UUID.randomUUID()）
+        Date d = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        String formatDate = format.format(d);
+        String str = "";
+        for(int i=0 ;i <5; i++){
+            int n = (int)(Math.random()*90)+10;
+            str += n;
+        }
+        // 获取文件的扩展名
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        // 文件名
+        return formatDate + str + "." + extension;
     }
 
 }

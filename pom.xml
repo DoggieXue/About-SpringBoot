@@ -68,7 +68,7 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.5.4</version>
 		</dependency>
-		<!-- 文件上传 -->
+		<!-- 文件上传  前后端分离方式-->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -92,7 +92,11 @@
 			<artifactId>jersey-common</artifactId>
 			<version>2.25.1</version>
 		</dependency>
-
+		<!-- 文件上传   表单形式-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 
 	</dependencies>
 

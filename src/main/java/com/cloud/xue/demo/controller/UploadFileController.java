@@ -11,9 +11,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @Program qrcode
@@ -22,10 +27,13 @@ import java.io.File;
  * @Author: XueXiao
  * @Create: 2019-03-19 17:13:55
  */
-@RestController
+@Controller
 public class UploadFileController {
 
     private static final Logger logger = Logger.getLogger(UploadFileController.class);
+
+    @Value(value="${file.tempPath}")
+    private String UPLOAD_FOLDER;
 
     @Value(value="${imagePath}")
     private String imgPath;
@@ -43,6 +51,7 @@ public class UploadFileController {
      */
     //@CrossOrigin
     @RequestMapping(value="/uploadFile", method=RequestMethod.POST)
+    @ResponseBody
     public Result<String> uploadPicByAjax(@PathVariable("uploadFile") MultipartFile uploadFile){
         String uploadInfo=null;
         try {
@@ -60,36 +69,41 @@ public class UploadFileController {
         }
     }
 
+    @GetMapping("/")
+    public String index(){
+        return "uploadByForm";
+    }
+
     /**
      * 通过表单形式上传图片
      * @param file
-     * @param request
+     * @param redirectAttributes
      * @return
      */
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public Result uploadPicByForm(@RequestParam("file") MultipartFile file, HttpServletRequest request){
-        Result response = new Result();
-//        if (!file.isEmpty()){
-//            String absolutePathByWebXml = System.getProperty("qrcode.app");
-//            log.info("通过web.xml配置获取绝对路径：" + absolutePathByWebXml);
-//            log.info("====================");
-//            String absolutePathByHttpRequest = request.getServletContext().getRealPath("/image");
-//            log.info("通过request.getServletContext().getRealPath()获取绝对路径：" + absolutePathByHttpRequest);
-//
-//            try {
-//                File dir = new File(absolutePathByHttpRequest + File.separator);
-//                if (!dir.exists()){
-//                    dir.mkdirs();
-//                }
-//                File serFile = new File(dir.getAbsolutePath()+File.separator+file.getOriginalFilename());
-//                file.transferTo(serFile);
-//                response.success(uploadHost + imgPath +File.separator+file.getOriginalFilename());
-//            }catch (Exception e) {
-//                response.failure("上传图片失败！");
-//            }
-//        }else{
-//            response.failure("上传图片为空，请重新选择！");
-//        }
-        return response;
+    @PostMapping(value = "/upload")
+    public String uploadPicByForm(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
+        if (file.isEmpty()){
+            redirectAttributes.addFlashAttribute("message","Please select a file to upload");
+            return "redirect:uploadStatus";
+        }
+
+        try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(UPLOAD_FOLDER+ UploadUtil.generateFileName(file));
+
+            Files.write(path, bytes);
+            //如果使用addAttribute进行参数传递，URL显示参数，同时只能使用为String类型的对象。
+            //redirectAttributes.addAttribute("message","You successfully uploaded '" + file.getOriginalFilename() + "'");
+            //如果使用addFlashAttribute进行参数传递，在URL是不显示参数的，同时可以使用Bean对象传递。
+            redirectAttributes.addFlashAttribute("message","You successfully uploaded '" + file.getOriginalFilename() + "'");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return "redirect:uploadStatus";
+    }
+
+    @GetMapping("/uploadStatus")
+    public String uploadStatus() {
+        return "uploadStatus";
     }
 }

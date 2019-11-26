@@ -57,9 +57,11 @@ server {
 }
 ```  
 
-#方式二： 表单形式上传
-
-
+#方式二： 表单形式上传  
+使用thymeleaf，上传成功后跳转到结果页  
+注意事项：  
+- `UploadFileController`类上的注解由`@RestController`要改成`@Controller`,在需要返回json的方法上单独加`@ResponseBody`;  
+- 使用`RedirectAttributes`给前端页面返回字符串，用于渲染，要使用`addFlashAttribute`方法，而非`addAttribute`方法，后者会将返回字符串显示到URL中
 
 
 SpringBoot引入Filter实现对URL的权限控制
