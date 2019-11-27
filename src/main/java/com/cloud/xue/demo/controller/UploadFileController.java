@@ -88,14 +88,19 @@ public class UploadFileController {
         }
 
         try {
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_FOLDER+ UploadUtil.generateFileName(file));
+//            byte[] bytes = file.getBytes();
+//            Path path = Paths.get(UPLOAD_FOLDER+ UploadUtil.generateFileName(file));
+//
+//            Files.write(path, bytes);
 
-            Files.write(path, bytes);
+
+            String filePath = UploadUtil.saveFile(file);
+
             //如果使用addAttribute进行参数传递，URL显示参数，同时只能使用为String类型的对象。
             //redirectAttributes.addAttribute("message","You successfully uploaded '" + file.getOriginalFilename() + "'");
             //如果使用addFlashAttribute进行参数传递，在URL是不显示参数的，同时可以使用Bean对象传递。
             redirectAttributes.addFlashAttribute("message","You successfully uploaded '" + file.getOriginalFilename() + "'");
+            redirectAttributes.addFlashAttribute("path", filePath);
         } catch (IOException e){
             e.printStackTrace();
         }
