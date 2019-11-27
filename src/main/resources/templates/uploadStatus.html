@@ -8,6 +8,11 @@
 <div th:if="${message}">
     <h2 th:text="${message}"/>
 </div>
+<br/>
+<!--/*@thymesVar id="path" type="templates"*/-->
+<div th:if="${path}">
+    <img th:src="@{${path}}" />
+</div>
 
 </body>
 </html>

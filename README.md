@@ -1,5 +1,12 @@
 # About-SpringBoot
 
+SpringBoot集成FastDFS
+---
+
+- 由于fastdfs-client-java-1.27-SNAPSHOT.jar未上传到中央仓库，需要将开源项目下载到本地，执行`mvn clean install`命令，将jar包添加到本地仓库
+- 添加fdfs_client.conf配置文件`tracker_server`为文件服务器地址
+
+
 SpringBoot文件上传
 ---
 # 方式一： 前后端分离，ajax请求上传
