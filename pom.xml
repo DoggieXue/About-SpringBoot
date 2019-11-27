@@ -102,11 +102,6 @@
 		<dependency>
 			<groupId>org.csource</groupId>
 			<artifactId>fastdfs-client-java</artifactId>
-			<version>1.27-RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.csource</groupId>
-			<artifactId>fastdfs-client-java</artifactId>
 			<version>1.27-SNAPSHOT</version>
 		</dependency>
 
